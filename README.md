@@ -8,7 +8,7 @@ VUE with questions marks becuase I need to learn it, this is why I think this is
 
 An application like this would look way better on an phone device, so I am as well gonna try to make it for IOS firts, since that is the OS we both have.
 
-##What will it include?
+## What will it include?
 
 - HTTPS connection
 - Endpoints
