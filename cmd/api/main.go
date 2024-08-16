@@ -1,32 +1,27 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/stransyyy/couple-notes/config"
+	"github.com/stransyyy/couple-notes/internal/handlers"
+	"github.com/stransyyy/couple-notes/internal/repository"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	config.LoadConfig()
+	config.InitLogger()
+	config.InitDynamoDB()
 
-	fmt.Println("Initializing logger...")
-	config.InitLogger() // Initialize the logger first
+	store := &repository.DynamoDBStore{DB: config.DynamoDB}
 
-	fmt.Println("Loading config...")
-	config.LoadConfig() // Load configuration after initializing the logger
-
-	fmt.Println("Initializing DynamoDB...")
-	config.InitDynamoDB() // Initialize DynamoDB connection
-
-	fmt.Println("Starting Gin server...")
 	r := gin.Default()
 
-	r.GET("/ping", func(c *gin.Context) {
-		config.Log.Info("Ping received")
-		c.JSON(200, gin.H{"message": "pong"})
-	})
+	// Define routes and map them to the handlers
+	r.POST("/notes", handlers.CreateNote(*store))
+	r.GET("/notes/:id", handlers.GetNoteByID(*store))
+	r.PUT("/notes/:id", handlers.UpdateNoteContent(*store))
+	r.DELETE("/notes/:id", handlers.DeleteNoteByID(*store))
 
 	r.Run(":8080")
-
 }

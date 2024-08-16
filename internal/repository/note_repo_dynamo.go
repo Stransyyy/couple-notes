@@ -70,3 +70,40 @@ func (d *DynamoDBStore) GetNoteByID(id string) (models.Note, error) {
 
 	return note, nil
 }
+
+func (d *DynamoDBStore) DeleteNoteByID(id string) error {
+	_, err := d.DB.DeleteItem(context.TODO(), &dynamodb.DeleteItemInput{
+		TableName: aws.String("NotesTable"),
+		Key: map[string]types.AttributeValue{
+			"NoteID": &types.AttributeValueMemberS{Value: id},
+		},
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (d *DynamoDBStore) UpdateNoteContent(id string, note models.Note) error {
+	// Use the id to update the note
+	_, err := d.DB.UpdateItem(context.TODO(), &dynamodb.UpdateItemInput{
+		TableName: aws.String("NotesTable"),
+		Key: map[string]types.AttributeValue{
+			"NoteID": &types.AttributeValueMemberS{Value: id},
+		},
+		UpdateExpression: aws.String("SET Content = :c"),
+		ExpressionAttributeValues: map[string]types.AttributeValue{
+			":c": &types.AttributeValueMemberS{Value: note.Content},
+		},
+	})
+
+	if err != nil {
+		config.Log.Error("Failed to update note content in DynamoDB", err)
+		return err
+	}
+
+	config.Log.Info("Note content updated successfully", id)
+	return nil
+}
