@@ -16,3 +16,4 @@ An application like this would look way better on an phone device, so I am as we
 - Sotrage. Alternating on MySQL and Dynamo. Maybe S3 for photos maybe
 - Use Spotify API to share each other currently playing music
 - Be able to make reminders for when needed. Special dates.
+- Websockets for real time update
