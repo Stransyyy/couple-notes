@@ -4,7 +4,7 @@ In this project I will be making something that will make me think about my girl
 
 I will develop the backend, as well as the front-end using VUE???
 
-VUE with questions marks becuase I need to learn it, this is why I think this is a good project, it envolves something personal but at the same time I learn new technologies.
+VUE with question marks becuase I need to learn it, this is why I think this is a good project, it envolves something personal but at the same time I learn new technologies.
 
 An application like this would look way better on an phone device, so I am as well gonna try to make it for IOS firts, since that is the OS we both have.
 
