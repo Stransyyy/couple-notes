@@ -5,7 +5,9 @@ import (
 	"log"
 	"os"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/sirupsen/logrus"
 )
@@ -28,10 +30,13 @@ func InitLogger() {
 
 // InitDynamoDB initializes the DynamoDB connection.
 func InitDynamoDB() {
+	creds := credentials.NewStaticCredentialsProvider(*aws.String(), *aws.String(), "")
+
 	// Load AWS SDK configuration using the default method.
-	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion("us-east-1"))
+	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithCredentialsProvider(creds),
+		config.WithRegion(*aws.String(os.Getenv("AWS_REGION"))))
 	if err != nil {
-		log.Fatal("Unable to load AWS SDK config, " + err.Error())
+		Log.Info("Unable to load the AWS SDK Config", err.Error())
 	}
 
 	// Initialize DynamoDB client.
@@ -47,5 +52,5 @@ func LoadConfig() {
 	//     log.Fatal("Error loading .env file")
 	// }
 
-	Log.Info(1)
+	Log.Info("Starting")
 }

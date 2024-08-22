@@ -10,7 +10,7 @@ import (
 )
 
 // CreateNote handles the POST request to add a new note to the DB
-func CreateNote(store repository.DynamoDBStore) gin.HandlerFunc {
+func CreateNote(store *repository.DynamoDBStore) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var note models.Note
 		if err := ctx.BindJSON(&note); err != nil {
@@ -23,7 +23,7 @@ func CreateNote(store repository.DynamoDBStore) gin.HandlerFunc {
 
 		err := store.SaveNote(note)
 		if err != nil {
-			ctx.JSON(500, gin.H{"error": "Failed to save note on the database"})
+			ctx.JSON(500, gin.H{"error": "Failed to save note on the database:" + err.Error()})
 			return
 		}
 
@@ -32,7 +32,7 @@ func CreateNote(store repository.DynamoDBStore) gin.HandlerFunc {
 }
 
 // GetNote handles the GET request to fetch a note by ID.
-func GetNoteByID(store repository.DynamoDBStore) gin.HandlerFunc {
+func GetNoteByID(store *repository.DynamoDBStore) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")
 
@@ -47,7 +47,7 @@ func GetNoteByID(store repository.DynamoDBStore) gin.HandlerFunc {
 }
 
 // UpdateNoteContent handles the PUT request to update a note's content.
-func UpdateNoteContent(store repository.DynamoDBStore) gin.HandlerFunc {
+func UpdateNoteContent(store *repository.DynamoDBStore) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")
 		var payload models.Note
@@ -69,7 +69,7 @@ func UpdateNoteContent(store repository.DynamoDBStore) gin.HandlerFunc {
 }
 
 // DeleteNote handles the DELETE request to remove a note by ID.
-func DeleteNoteByID(store repository.DynamoDBStore) gin.HandlerFunc {
+func DeleteNoteByID(store *repository.DynamoDBStore) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")
 

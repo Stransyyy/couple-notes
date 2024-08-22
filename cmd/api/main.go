@@ -9,8 +9,9 @@ import (
 )
 
 func main() {
-	config.LoadConfig()
 	config.InitLogger()
+
+	config.LoadConfig()
 	config.InitDynamoDB()
 
 	store := &repository.DynamoDBStore{DB: config.DynamoDB}
@@ -18,10 +19,10 @@ func main() {
 	r := gin.Default()
 
 	// Define routes and map them to the handlers
-	r.POST("/notes", handlers.CreateNote(*store))
-	r.GET("/notes/:id", handlers.GetNoteByID(*store))
-	r.PUT("/notes/:id", handlers.UpdateNoteContent(*store))
-	r.DELETE("/notes/:id", handlers.DeleteNoteByID(*store))
+	r.POST("/notes", handlers.CreateNote(store))
+	r.GET("/notes/:id", handlers.GetNoteByID(store))
+	r.PUT("/notes/:id", handlers.UpdateNoteContent(store))
+	r.DELETE("/notes/:id", handlers.DeleteNoteByID(store))
 
 	r.Run(":8080")
 }
